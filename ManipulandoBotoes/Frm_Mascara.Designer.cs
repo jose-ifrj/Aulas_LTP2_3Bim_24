@@ -153,6 +153,7 @@
             Name = "Frm_Mascara";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Exemplos de Máscaras";
+            Load += Frm_Mascara_Load;
             ResumeLayout(false);
             PerformLayout();
         }
