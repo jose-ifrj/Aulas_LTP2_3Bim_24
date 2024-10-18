@@ -124,6 +124,7 @@
             Btn_Senha.TabIndex = 8;
             Btn_Senha.Text = "Senha";
             Btn_Senha.UseVisualStyleBackColor = true;
+            Btn_Senha.Click += Btn_Senha_Click;
             // 
             // Btn_VerConteudo
             // 
