@@ -6,8 +6,6 @@ namespace ManipulandoBotoes
         {
             InitializeComponent();
 
-
-
             Msk_TextBox.KeyDown += Msk_TextBox_EventoTecla;
         }
 
@@ -18,7 +16,7 @@ namespace ManipulandoBotoes
 
         private void Msk_TextBox_EventoTecla(object sender, KeyEventArgs e)
         {
-            switch(e.KeyCode)
+            switch (e.KeyCode)
             {
                 case Keys.D0 or Keys.NumPad0:
                     InserirNumero(0);
@@ -51,6 +49,7 @@ namespace ManipulandoBotoes
                     InserirNumero(9);
                     break;
                 case Keys.Back:
+                    Apagar_DireitaParaEsquerda();
                     break;
                 default:
                     e.Handled = false;
@@ -62,13 +61,12 @@ namespace ManipulandoBotoes
         {
             if (DireitaParaEsquerda)
             {
-                MessageBox.Show(DireitaParaEsquerda.ToString());
                 if (ExcedeuLimite()) return;
                 Inserir_DireitaParaEsquerda(num);
             }
             if (Selecionado == "hora")
             {
-                
+
             }
         }
 
@@ -81,8 +79,19 @@ namespace ManipulandoBotoes
         private void Inserir_DireitaParaEsquerda(int num)
         {
             int alvo = Msk_TextBox.Text.Length - NumerosInseridos;
-            Msk_TextBox.Text.Remove(alvo);
-            Msk_TextBox.Text.Insert(alvo, num.ToString());
+            //string temp = ;
+            Msk_TextBox.Text = Msk_TextBox.Text.Remove(alvo - 1, 1);
+            Msk_TextBox.Text = Msk_TextBox.Text.Insert(Msk_TextBox.Text.Length - 1, num.ToString());
+            //Msk_TextBox.Text = temp;
+            NumerosInseridos++;
+        }
+
+        private void Apagar_DireitaParaEsquerda()
+        {
+            int alvo = Msk_TextBox.Text.Length - NumerosInseridos;
+            Msk_TextBox.Text = Msk_TextBox.Text.Remove(Msk_TextBox.Text.Length - 1, 1);
+            Msk_TextBox.Text = Msk_TextBox.Text.Insert(alvo - 1, "0");
+            NumerosInseridos--;
         }
 
 

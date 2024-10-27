@@ -47,6 +47,7 @@
             Msk_TextBox.Name = "Msk_TextBox";
             Msk_TextBox.Size = new Size(258, 26);
             Msk_TextBox.TabIndex = 0;
+            Msk_TextBox.TextMaskFormat = MaskFormat.IncludePrompt;
             // 
             // Lbl_Conteudo
             // 
