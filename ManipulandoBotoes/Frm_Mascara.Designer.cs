@@ -48,6 +48,7 @@
             Msk_TextBox.Size = new Size(258, 26);
             Msk_TextBox.TabIndex = 0;
             Msk_TextBox.TextMaskFormat = MaskFormat.IncludePrompt;
+            Msk_TextBox.MaskInputRejected += Msk_TextBox_MaskInputRejected;
             // 
             // Lbl_Conteudo
             // 

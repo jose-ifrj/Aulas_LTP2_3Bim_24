@@ -1,4 +1,4 @@
-namespace ManipulandoBotoes
+﻿namespace ManipulandoBotoes
 {
     public partial class Frm_Mascara : Form
     {
@@ -59,6 +59,7 @@ namespace ManipulandoBotoes
 
         private bool InserirNumero(int num)
         {
+            if (ExcedeuLimite()) return false;
             if (DireitaParaEsquerda)
             {
                 Inserir_DireitaParaEsquerda(num);
@@ -66,7 +67,7 @@ namespace ManipulandoBotoes
             }
             if (Selecionado == "hora")
             {
-                switch(NumerosInseridos)
+                switch (NumerosInseridos)
                 {
                     case 0:
                         if (num > 2) return false; break;
@@ -81,12 +82,29 @@ namespace ManipulandoBotoes
                 NumerosInseridos++;
                 return true;
             }
+            if (Selecionado == "data")
+            {
+                switch (NumerosInseridos)
+                {
+                    case 0:
+                        if (num > 3) return false; break;
+                    case 1:
+                        if (num > 4) return false; break;
+                    case 2:
+                        if (num > 1) return false; break;
+                    case 3:
+                        if (num > 2) return false; break;
+                }
+                Msk_TextBox.Text = Msk_TextBox.Text.Insert(NumerosInseridos, num.ToString());
+                NumerosInseridos++;
+                return true;
+            }
             return false;
         }
 
         public bool ExcedeuLimite()
         {
-            //exce��o: senha nao tem limite de caractere
+            //exceção: senha nao tem limite de caractere
             if (Selecionado == "senha") return false;
 
             if (NumerosInseridos >= Msk_TextBox.Text.Length) return true;
@@ -110,10 +128,11 @@ namespace ManipulandoBotoes
                 int alvo = Msk_TextBox.Text.Length - NumerosInseridos;
                 Msk_TextBox.Text = Msk_TextBox.Text.Remove(Msk_TextBox.Text.Length - 1, 1);
                 Msk_TextBox.Text = Msk_TextBox.Text.Insert(alvo - 1, "0");
-            } else
+            }
+            else
             {
-                Msk_TextBox.Text = Msk_TextBox.Text.Remove(NumerosInseridos-1,1);
-                Msk_TextBox.Text = Msk_TextBox.Text.Insert(NumerosInseridos, "0");
+                Msk_TextBox.Text = Msk_TextBox.Text.Remove(NumerosInseridos - 1, 1);
+                Msk_TextBox.Text = Msk_TextBox.Text.Insert(NumerosInseridos - 1, "0");
             }
 
             NumerosInseridos--;
@@ -141,9 +160,40 @@ namespace ManipulandoBotoes
 
         private void Btn_VerConteudo_Click(object sender, EventArgs e)
         {
-            Msk_TextBox.CutCopyMaskFormat = MaskFormat.IncludePromptAndLiterals;
+            if (Selecionado == "senha" && SenhaInvalida()) { return; }
+            var FormatoOriginal = Msk_TextBox.CutCopyMaskFormat;
+            Msk_TextBox.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
             Lbl_Conteudo.Text = Msk_TextBox.Text;
-            Msk_TextBox.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
+            Msk_TextBox.TextMaskFormat = FormatoOriginal;
+        }
+
+        public bool SenhaInvalida()
+        {
+            if (!(Msk_TextBox.Text.Any(ch => !char.IsLetterOrDigit(ch)))) {
+                MessageBox.Show("Não contém caractere especial");
+                return true;
+            }
+            if (!(Msk_TextBox.Text.Any(ch => char.IsUpper(ch)))) {
+                MessageBox.Show("Não contém letra maiúscula");
+                return true;
+            }
+            if (!(Msk_TextBox.Text.Any(ch => char.IsLower(ch))))
+            {
+                MessageBox.Show("Não contém letra minúscula.");
+                return true;
+            }
+            if (!(Msk_TextBox.Text.Any(ch => char.IsNumber(ch))))
+            {
+                MessageBox.Show("Não contém número.");
+                return true;
+            }
+            if (Msk_TextBox.Text.Length < 8)
+            {
+                MessageBox.Show("Contém menos que 8 caracteres.");
+                return true;
+            }
+            return false;
+            
         }
 
         private void Btn_CEP_Click(object sender, EventArgs e)
@@ -192,7 +242,7 @@ namespace ManipulandoBotoes
             Msk_TextBox.Text = "00000000";
             tamanho = Msk_TextBox.Text.Length;
 
-            Msk_TextBox.ReadOnly = false;
+            Msk_TextBox.ReadOnly = true;
 
             Msk_TextBox.Focus();
         }
@@ -225,15 +275,20 @@ namespace ManipulandoBotoes
             NumerosInseridos = 0;
 
             Msk_TextBox.UseSystemPasswordChar = false;
+            Msk_TextBox.PasswordChar = '●';
             Lbl_Conteudo.Text = "";
             Msk_TextBox.Mask = "";
             Lbl_MascaraAtiva.Text = Msk_TextBox.Mask;
-            Msk_TextBox.Text = "0000000000";
             tamanho = Msk_TextBox.Text.Length;
 
-            Msk_TextBox.ReadOnly = true;
+            Msk_TextBox.ReadOnly = false;
 
             Msk_TextBox.Focus();
+        }
+
+        private void Msk_TextBox_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
         }
     }
 }
